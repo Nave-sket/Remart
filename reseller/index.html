@@ -1,17 +1,44 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reseller</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body class="bg-gray-50 p-4"><h1 class="text-xl font-black">ReMart Seller Panel</h1><p class="text-xs text-gray-500">Your Code: <span id="code" class="font-bold"></span></p>
-<div class="bg-white p-4 rounded-xl shadow mt-4 space-y-3">
-<input id="title" placeholder="Product Title (e.g. Kurta)" class="w-full border p-2 rounded">
-<input id="image" placeholder="Image URL paste karo" class="w-full border p-2 rounded">
-<div class="flex gap-2"><input id="base" type="number" placeholder="Meesho Price (500)" class="w-1/2 border p-2 rounded"><input id="commission" type="number" placeholder="Your Profit (100)" class="w-1/2 border p-2 rounded"></div>
-<div class="bg-yellow-50 p-2 rounded text-xs">Sell Price: ₹<span id="fp">0</span> | My Fee 5%: ₹<span id="fee">0</span> | You Get: ₹<span id="net">0</span></div>
-<input id="wa" placeholder="Your WhatsApp No 91XXXXXXXXXX" class="w-full border p-2 rounded">
-<button onclick="add()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Add to Shop</button>
-</div><div id="list" class="mt-6 grid grid-cols-2 gap-2"></div>
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Reseller - ReMart</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-gray-100 p-4">
+<div class="max-w-md mx-auto space-y-4">
+  <div class="bg-black text-white p-4 rounded-xl flex justify-between">
+    <div><p class="text-xs opacity-70">Wallet Balance</p><h1 id="wallet" class="text-2xl font-bold">₹0</h1></div>
+    <button onclick="addMoney()" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Add Money</button>
+  </div>
+  <div class="bg-white p-4 rounded-xl shadow">
+    <h2 class="font-bold">Add New Product</h2>
+    <input id="pname" placeholder="Product Name" class="w-full border p-2 mt-2 rounded">
+    <div class="flex gap-2 mt-2">
+      <input id="cost" type="number" placeholder="Original Cost (e.g. 300)" class="w-1/2 border p-2 rounded">
+      <input id="sell" type="number" placeholder="Selling Price (e.g. 500)" class="w-1/2 border p-2 rounded">
+    </div>
+    <p class="text-xs mt-2 text-gray-500">Profit: <span id="profit">0</span> | Tera 70% | Admin 30%</p>
+    <button onclick="addProduct()" class="w-full bg-black text-white p-2 rounded mt-3">List Product</button>
+  </div>
+  <div class="bg-white p-4 rounded-xl shadow"><h2 class="font-bold">My Orders</h2><p class="text-sm text-gray-500 mt-2">COD ke liye wallet me paisa hona zaruri hai.</p></div>
+</div>
 <script>
-const supa=supabase.createClient("https://wvazcudexrrzcfiotkan.supabase.co","sb_publishable_-clOP2Nb7AYi4xPJgVzULQ_TT4VEklP");
-let code=localStorage.getItem('rc')||'RES'+Math.floor(Math.random()*9000);localStorage.setItem('rc',code);document.getElementById('code').innerText=code;
-let b=document.getElementById('base'),c=document.getElementById('commission');
-function calc(){let bv=parseInt(b.value||0),cv=parseInt(c.value||0),fp=bv+cv;document.getElementById('fp').innerText=fp;let fee=Math.round(fp*0.05);document.getElementById('fee').innerText=fee;document.getElementById('net').innerText=cv-fee;}
-b.addEventListener('input',calc);c.addEventListener('input',calc);
-async function add(){let t=document.getElementById('title').value,i=document.getElementById('image').value,bv=parseInt(document.getElementById('base').value),cv=parseInt(document.getElementById('commission').value),w=document.getElementById('wa').value,fp=bv+cv;if(!t||!i||!bv||!cv||!w)return alert('sab bharo');let {error}=await supa.from('products').insert([{reseller_code:code,reseller_whatsapp:w,title:t,image:i,base_price:bv,commission:cv,final_price:fp}]);if(error)alert(error.message);else{alert('Product
+  let wallet = parseInt(localStorage.getItem('wallet')||'0');
+  document.getElementById('wallet').innerText = '₹'+wallet;
+  document.getElementById('cost').oninput = document.getElementById('sell').oninput = ()=>{
+    let c=parseInt(document.getElementById('cost').value||0); let s=parseInt(document.getElementById('sell').value||0);
+    document.getElementById('profit').innerText = '₹'+(s-c);
+  }
+  function addMoney(){
+    let amt = prompt("Kitna add karna hai? (e.g. 500)");
+    if(!amt) return;
+    let upi = "8368322869@ybl";
+    let link = `upi://pay?pa=${upi}&pn=ReMart Admin&am=${amt}&cu=INR&tn=Wallet Recharge`;
+    window.location.href = link;
+    alert("Payment ke baad admin approve karega, fir wallet me paisa aayega. Screenshot admin ko bhej do.");
+    // Demo ke liye turant add kar diya
+    wallet += parseInt(amt);
+    localStorage.setItem('wallet', wallet);
+    document.getElementById('wallet').innerText = '₹'+wallet;
+  }
+  function addProduct(){ alert("Product Listed! Jab order ayega, 30% admin fee wallet se katega."); }
+</script>
+</body>
+</html>
