@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReMart Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div id="login" class="flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-xl shadow-lg w-96">
+    <h1 class="text-2xl font-bold mb-2">Admin Login</h1>
+    <p class="text-gray-500 text-sm mb-6">PIN: 1234</p>
+    <input id="pin" type="password" placeholder="Enter PIN" class="w-full border p-3 rounded-lg mb-4">
+    <button onclick="checkPin()" class="w-full bg-black text-white p-3 rounded-lg font-bold">Login</button>
+    <p id="err" class="text-red-500 text-sm mt-3 hidden">Galat PIN!</p>
+  </div>
+</div>
+
+<div id="dashboard" class="hidden">
+  <header class="bg-black text-white p-4 flex justify-between">
+    <h1 class="font-bold text-xl">ReMart Admin</h1>
+    <button onclick="logout()" class="text-sm bg-white text-black px-3 py-1 rounded">Logout</button>
+  </header>
+  <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-gray-500 text-sm">Total Orders</p><h2 id="totalOrders" class="text-2xl font-bold">0</h2></div>
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-gray-500 text-sm">Tera Commission (₹49+5%)</p><h2 id="totalComm" class="text-2xl font-bold text-green-600">₹0</h2></div>
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-gray-500 text-sm">Total Resellers</p><h2 id="totalRes" class="text-2xl font-bold">3</h2></div>
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-gray-500 text-sm">Pending Approval</p><h2 class="text-2xl font-bold text-orange-500">2</h
