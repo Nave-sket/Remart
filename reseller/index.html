@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reseller Dashboard - ReMart</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 min-h-screen">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reseller</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-gray-50">
 <div id="login" class="flex items-center justify-center min-h-screen p-4">
   <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
-    <h1 class="text-2xl font-bold mb-1">Reseller Login</h1>
-    <p class="text-gray-500 text-sm mb-6">Apna dashboard dekho</p>
-    <input id="email" type="email" placeholder="Email (jaise sonu@gmail.com)" class="w-full border p-3 rounded-lg mb-3">
-    <input id="pass" type="password" placeholder="Password (koi bhi)" class="w-full border p-3 rounded-lg mb-4">
-    <button onclick="login()" class="w-full bg-black text-white p-3 rounded-lg font-bold">Login</button>
-    <p class="text-xs text-gray-400 mt-3">* Abhi demo login hai, koi bhi email/password se login ho jayega</p>
+    <h1 class="text-2xl font-bold">Reseller Login</h1><p class="text-sm text-gray-500 mb-6">Apna profit dekho</p>
+    <input id="email" type="email" placeholder="Email" class="w-full border-2 p-3 rounded-lg mb-3">
+    <input id="upi" type="text" placeholder="Tumhara UPI ID (jaise sonu@paytm)" class="w-full border-2 p-3 rounded-lg mb-4">
+    <button id="btn" class="w-full bg-black text-white p-3 rounded-lg font-bold">Login</button>
   </div>
 </div>
-
 <div id="dash" class="hidden">
-  <header class="bg-black text-white p-4 flex justify-between items-center">
-    <h1 class="font-bold">ReMart Reseller</h1>
-    <div class="flex gap-3 items-center">
-      <span id="uEmail" class="text-xs bg-white/20 px-2 py-1 rounded"></span>
-      <button onclick="logout()" class="text-xs bg-white text-black px-3 py-1 rounded">Logout</button>
-    </div>
-  </header>
-  <div class="p-4 grid grid-cols-2 gap-4">
-    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Total Kamai</p><h2 class="text-xl font-bold text-green-600">₹1,240</h2></div>
-    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Orders</p><h2 class="text-xl font-bold">8</h2></div>
+  <header class="bg-black text-white p-4 flex justify-between"><h1 class="font-bold">ReMart Reseller</h1><button onclick="localStorage.clear();location.reload()" class="text-xs bg-white text-black px-2 py-1 rounded">Logout</button></header>
+  <div class="p-4 grid grid-cols-2 gap-3">
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Total Kamai</p><h2 class="text-xl font-bold text-green-600">₹320</h2><p class="text-xs text-gray-400">2 orders se</p></div>
+    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Pending Payout</p><h2 class="text-xl font-bold">₹320</h2><button class="mt-2 w-full bg-green-600 text-white text-xs py-2 rounded">Request Payout</button></div>
   </div>
-  <div class="p-4 space-y-4">
-    <div class="bg-white rounded-xl shadow p-4">
-      <h3 class="font-bold mb-3">Share karke becho</h3>
-      <div class="flex gap-2">
-        <input id="shareLink" value="https://remart2.vercel.app/?ref=SONU123" class="flex-1 border p-2 rounded text-sm">
-        <button onclick="navigator.clipboard.writeText(document.getElementById('shareLink').value); alert('Link copied!')" class="bg-black text-white px-4
+  <div class="p-4">
+    <div class="bg-white rounded-xl shadow p-4 mb-4">
+      <h3 class="font-bold text-sm mb-2">Tera Selling Link</h3>
+      <input id="link" value="https://remart2.vercel.app/?ref=SONU" class="w-full border p-2 rounded text-sm bg-gray-50">
+      <button onclick="navigator.clipboard.writeText(document.getElementById('link').value); alert('Copied!')" class="mt-2 w-full bg-black text-white py-2 rounded text-sm">Copy Link - WhatsApp pe share kar</button>
+      <p class="text-xs text-gray-400 mt-2">Is link se jo kharidega, tujhe profit milega. Tera UPI: <span id="showUpi"></span></p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-4"><h3 class="font-bold text-sm mb-3">Mere Orders</h3><div class="text-sm space-y-2"><div class="border p-2 rounded flex justify-between"><span>Kurta ₹499</span><span class="text-green-600 font-bold">+₹120</span></div><div class="border p-2 rounded flex justify-between"><span>Saree ₹899</span><span class="text-green-600 font-bold">+₹200</span></div></div></div>
+  </div>
+</div>
+<script>
+document.getElementById('btn').addEventListener('click', function(){
+  var e=document.getElementById('email').value; var u=document.getElementById('upi').value;
+  if(!e){alert('Email daal');return;} if(!u){alert('UPI daal jisse tujhe paise milenge');return;}
+  localStorage.setItem('resEmail',e); localStorage.setItem('resUpi',u);
+  showDash();
+});
+function showDash(){
+  var e=localStorage.getItem('resEmail'); var u=localStorage.getItem('resUpi');
+  if(!e) return;
+  document.getElementById('login').classList.add('hidden'); document.getElementById('dash').classList.remove('hidden');
+  document.getElementById('showUpi').innerText=u; document.getElementById('link').value='https://remart2.vercel.app/?ref='+e.split('@')[0].toUpperCase();
+}
+showDash();
+</script></body></html>
