@@ -1,9 +1,37 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Remart</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body class="bg-gray-100"><header class="bg-white p-3 shadow flex justify-between sticky top-0 z-50"><h1 class="font-black text-xl">ReMart</h1><a href="/reseller" class="bg-black text-white text-xs px-3 py-1 rounded">Become Seller</a></header>
-<div id="products" class="p-3 grid grid-cols-2 gap-3"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReMart - Resell & Earn</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>body{font-family:'Inter',sans-serif}</style>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-[#f9f9f9]">
+<header class="bg-white sticky top-0 z-20 shadow-sm">
+  <div class="max-w-6xl mx-auto p-3 flex justify-between items-center">
+    <h1 class="text-2xl font-extrabold">ReMart<span class="text-pink-600">.</span></h1>
+    <div class="flex gap-2">
+      <a href="/reseller" class="bg-black text-white px-4 py-2 rounded-full text-sm font-bold">My Earnings</a>
+      <a href="/admin" class="border px-4 py-2 rounded-full text-sm font-bold">Admin</a>
+    </div>
+  </div>
+  <div class="bg-black text-white text-center text-xs py-1.5">🔥 Free Delivery | Cash on Delivery | 0% Commission for Resellers</div>
+</header>
+
+<div class="max-w-6xl mx-auto p-4">
+  <div class="bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl p-6 text-white flex justify-between items-center mb-6">
+    <div><h2 class="text-2xl font-extrabold">Resell Karo, Kamao</h2><p class="text-sm opacity-90 mt-1">Har product pe 30% tak profit</p></div>
+    <a href="/reseller" class="bg-white text-black px-5 py-2 rounded-full font-bold text-sm">Become Seller</a>
+  </div>
+
+  <h3 class="font-bold text-lg mb-3">Trending Products</h3>
+  <div id="products" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <p class="col-span-4 text-center text-gray-400 py-10">Loading products...</p>
+  </div>
+</div>
+
 <script>
-const supa=supabase.createClient("https://wvazcudexrrzcfiotkan.supabase.co","sb_publishable_-clOP2Nb7AYi4xPJgVzULQ_TT4VEklP");
-async function load(){let {data}=await supa.from('products').select('*').order('created_at',{ascending:false});let h='';if(!data||data.length==0)h='<p class="col-span-2 text-center text-gray-400 mt-10">No products yet. Reseller se add karo.</p>';data?.forEach(p=>{h+=`<div class="bg-white rounded-xl shadow overflow-hidden"><img src="${p.image}" class="h-40 w-full object-cover"><div class="p-2"><h3 class="font-bold text-sm">${p.title}</h3><p class="text-xs">₹${p.final_price} <span class="text-green-600">${p.commission} profit</span></p><button onclick="buy('${p.reseller_whatsapp}','${p.title}',${p.final_price})" class="w-full mt-2 bg-black text-white text-xs py-2 rounded">Buy Now</button></div></div>`});document.getElementById('products').innerHTML=h;}
-function buy(wa,title,price){let fee=Math.round(price*0.05);let msg=`New Order on ReMart%0AProduct: ${title}%0APrice: ₹${price}%0APlatform Fee (5%): ₹${fee} aapko dena hai%0ACustomer Details bhejo`;window.open(`https://wa.me/${wa}?text=${msg}`,'_blank');}
-load();
-</script></body></html>
+const supabaseUrl = 'https://wvazcudexrrzcfiotkan.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2YXpjdWRleHJyenpjZmlvdGthbiIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzU2OTEzNjEwMSwiZXhwIjoyMDcyNzEyMTAxfQ.8u_7R2a3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f3dJ5f
