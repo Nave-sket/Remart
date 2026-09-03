@@ -1,21 +1,13 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - ReMart</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin PRO</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
 <body class="bg-[#f8f8f8] p-4">
-<div class="flex justify-between items-center"><h1 class="font-black text-xl">ReMart Admin</h1><button onclick="load()" class="bg-black text-white px-3 py-1 rounded text-xs">Refresh</button></div>
-<div class="grid grid-cols-3 gap-3 mt-4">
-<div class="bg-white p-3 rounded-xl"><p class="text-[11px] text-gray-400">Total Orders</p><h2 id="tOrders" class="font-black text-xl">0</h2></div>
-<div class="bg-white p-3 rounded-xl"><p class="text-[11px] text-gray-400">Total Sale</p><h2 id="tSale" class="font-black text-xl">₹0</h2></div>
-<div class="bg-[#f43397] text-white p-3 rounded-xl"><p class="text-[11px]">Tera Profit (30%)</p><h2 id="tProfit" class="font-black text-xl">₹0</h2></div>
-</div>
-<div id="list" class="mt-4 space-y-3"></div>
+<h1 class="font-black text-xl">ReMart Admin PRO</h1>
+<div class="grid grid-cols-3 gap-2 mt-4"><div class="bg-white p-3 rounded-xl"><p class="text-[10px] text-gray-400">Orders</p><h2 id="tOrders" class="font-black">0</h2></div><div class="bg-white p-3 rounded-xl"><p class="text-[10px] text-gray-400">Total Sale</p><h2 id="tSale" class="font-black">₹0</h2></div><div class="bg-[#f43397] text-white p-3 rounded-xl"><p class="text-[10px]">Profit 30%</p><h2 id="tProfit" class="font-black">₹0</h2></div></div>
+<h2 class="font-bold mt-6">Wallet Requests</h2><div id="walletReq" class="mt-2 space-y-2"></div>
+<h2 class="font-bold mt-6">Withdraw Requests</h2><div id="withReq" class="mt-2 space-y-2"></div>
+<h2 class="font-bold mt-6">Live Orders</h2><div id="list" class="mt-2 space-y-2"></div>
 <script>
 const client = supabase.createClient("https://wvazcudexrrzcfiotkan.supabase.co", "sb_publishable_-clOP2Nb7AYi4xPJgVzULQ_TT4VEklP");
-async function load(){
- let {data} = await client.from('orders').select('*').order('created_at',{ascending:false});
- if(!data) return;
- document.getElementById('tOrders').innerText=data.length;
- document.getElementById('tSale').innerText='₹'+data.reduce((s,o)=>s+o.total,0);
- document.getElementById('tProfit').innerText='₹'+data.reduce((s,o)=>s+o.platform_fee,0);
- document.getElementById('list').innerHTML=data.map(o=>`<div class="bg-white p-3 rounded-xl border"><div class="flex justify-between"><p class="font-bold">${o.customer_name}</p><span class="text-[10px] px-2 py-1 rounded-full ${o.payment_mode=='ONLINE'?'bg-green-100 text-green-600':'bg-yellow-100 text-yellow-600'}">${o.payment_mode}</span></div><p class="text-xs text-gray-500">${o.phone} | ${o.address}</p><div class="mt-2 text-xs bg-gray-50 p-2 rounded">${o.products.map(p=>p.name).join(', ')}</div><div class="flex justify-between mt-2 text-sm"><span>Total: <b>₹${o.total}</b></span><span class="text-[#f43397]">Profit: <b>₹${o.platform_fee}</b></span></div><p class="text-[10px] text-gray-400 mt-1">${new Date(o.created_at).toLocaleString()}</p></div>`).join('');
-}
+async function load(){ let {data}=await client.from('orders').select('*').order('created_at',{ascending:false}); if(data){ document.getElementById('tOrders').innerText=data.length; document.getElementById('tSale').innerText='₹'+data.reduce((s,o)=>s+o.total,0); document.getElementById('tProfit').innerText='₹'+data.reduce((s,o)=>s+o.platform_fee,0); document.getElementById('list').innerHTML=data.map(o=>`<div class="bg-white p-3 rounded-xl text-sm"><b>${o.customer_name} - ${o.phone}</b><p class="text-xs text-gray-500">${o.address}</p><p class="text-xs mt-1">₹${o.total} | Profit ₹${o.platform_fee} | ${o.payment_mode}</p></div>`).join(''); } let {data:w}=await client.from('wallet_requests').select('*').order('created_at',{ascending:false}); if(w) document.getElementById('walletReq').innerHTML=w.map(r=>`<div class="bg-white p-2 rounded text-xs flex justify-between"><span>${r.phone} - ₹${r.amount} - UTR:${r.utr} - ${r.status}</span></div>`).join(''); let {data:wd}=await client.from('withdraw_requests').select('*').order('created_at',{ascending:false}); if(wd) document.getElementById('withReq').innerHTML=wd.map(r=>`<div class="bg-white p-2 rounded text-xs flex justify-between"><span>${r.phone} - ₹${r.amount} - ${r.status}</span><button onclick="approveWD('${r.id}')" class="bg-black text-white px-2 rounded">Paid</button></div>`).join(''); }
+async function approveWD(id){ await client.from('withdraw_requests').update({status:'PAID'}).eq('id', id); alert("Paid mark kar diya - Ab UPI se bhej de 8368322869@ybl se"); load(); }
 load(); setInterval(load,3000);
 </script></body></html>
