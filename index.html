@@ -1,88 +1,95 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReMart - Lowest Price Bazaar</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
-<style>body{font-family:'Inter',sans-serif}</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>body{font-family:'Inter',sans-serif}.hide-scrollbar::-webkit-scrollbar{display:none}</style>
 </head>
 <body class="bg-[#f8f8f8]">
-<!-- Header Meesho style -->
+<!-- HEADER -->
 <div class="bg-white sticky top-0 z-50 border-b">
   <div class="flex items-center justify-between p-3">
-    <h1 class="text-[#f43397] font-black text-2xl tracking-tight">ReMart</h1>
+    <h1 class="text-[#f43397] font-black text-2xl">ReMart</h1>
     <div class="flex items-center gap-2">
       <a href="/reseller/" class="bg-[#f43397] text-white text-xs px-4 py-2 rounded-full font-bold">Resell Karo</a>
       <button onclick="openCart()" class="relative text-xl">🛒<span id="cart-count" class="absolute -top-2 -right-2 bg-black text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">0</span></button>
     </div>
   </div>
   <div class="px-3 pb-3">
-    <div class="bg-gray-100 rounded-lg flex items-center px-3 py-2"><span>🔍</span><input placeholder="Saree, Kurta, Shoes search karo" class="bg-transparent ml-2 w-full text-sm outline-none"></div>
+    <div class="bg-gray-100 rounded-lg flex items-center px-3 py-2.5">
+      <span>🔍</span>
+      <input id="searchBox" oninput="searchProduct(this.value)" placeholder="Saree, Kurta, Shoes, Watch search karo" class="bg-transparent ml-2 w-full text-sm outline-none">
+    </div>
   </div>
 </div>
 
-<!-- Banner -->
+<!-- BANNER -->
 <div class="bg-[#fff0f6] m-3 rounded-xl p-4 flex justify-between items-center">
-  <div><p class="font-black text-lg leading-tight">Lowest Prices<br>Best Quality</p><p class="text-xs mt-1 text-gray-600">50 lakh+ Products | Free Delivery</p></div>
-  <img src="https://i.imgur.com/8Km9tLL.png" class="w-20 h-20 object-contain">
+  <div><p class="font-black text-[18px] leading-tight">Lowest Prices<br>Best Quality Shopping</p><p class="text-xs mt-1 text-gray-600">50 Lakh+ Products | Free Delivery | COD</p></div>
+  <div class="text-4xl">🛍️</div>
 </div>
 
-<!-- Categories -->
-<div class="bg-white p-3 flex gap-4 overflow-x-auto">
-  <div class="text-center min-w-[60px]"><div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center text-xl">👗</div><p class="text-[11px] mt-1">Saree</p></div>
-  <div class="text-center min-w-[60px]"><div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-xl">👕</div><p class="text-[11px] mt-1">Kurta</p></div>
-  <div class="text-center min-w-[60px]"><div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-xl">👟</div><p class="text-[11px] mt-1">Shoes</p></div>
-  <div class="text-center min-w-[60px]"><div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center text-xl">🎧</div><p class="text-[11px] mt-1">Gadgets</p></div>
+<!-- CATEGORIES -->
+<div class="bg-white p-3 flex gap-5 overflow-x-auto hide-scrollbar">
+  <div onclick="filterCat('all')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center text-xl">All</div><p class="text-[11px] mt-1 font-bold">All</p></div>
+  <div onclick="filterCat('saree')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center text-xl">👗</div><p class="text-[11px] mt-1">Saree</p></div>
+  <div onclick="filterCat('kurta')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-xl">👕</div><p class="text-[11px] mt-1">Kurta</p></div>
+  <div onclick="filterCat('shoes')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-xl">👟</div><p class="text-[11px] mt-1">Shoes</p></div>
+  <div onclick="filterCat('watch')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-yellow-100 rounded-full flex items-center justify-center text-xl">⌚</div><p class="text-[11px] mt-1">Watch</p></div>
+  <div onclick="filterCat('earbuds')" class="text-center min-w-[60px] cursor-pointer"><div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center text-xl">🎧</div><p class="text-[11px] mt-1">Earbuds</p></div>
 </div>
 
-<!-- Products Title -->
-<div class="p-3 flex justify-between items-center"><h2 class="font-bold">Products For You</h2><span class="text-xs text-gray-500">COD Available</span></div>
+<div class="p-3 flex justify-between items-center"><h2 id="cat-title" class="font-bold">Products For You</h2><span class="text-xs text-gray-500">COD Available</span></div>
 
-<!-- Products Grid -->
 <div id="products" class="grid grid-cols-2 gap-3 p-3"></div>
 
-<!-- Cart Drawer -->
+<!-- CART -->
 <div id="cart-drawer" class="fixed inset-0 bg-black/60 hidden z-[99]">
   <div class="bg-white w-full max-w-sm h-full ml-auto flex flex-col">
     <div class="p-4 flex justify-between border-b"><h2 class="font-bold">Cart (<span id="cart-count2">0</span>)</h2><button onclick="closeCart()" class="w-8 h-8 bg-gray-100 rounded-full">✕</button></div>
     <div id="cart-items" class="flex-1 overflow-auto p-3 space-y-3"></div>
     <div class="p-4 border-t bg-white">
-      <div class="flex justify-between font-black text-lg"><span>Total Amount</span><span id="cart-total">₹0</span></div>
-      <div class="bg-green-50 text-green-700 text-[11px] p-2 rounded mt-2">💰 Paisa direct Admin UPI 8368322869@ybl pe jayega</div>
+      <div class="flex justify-between font-black text-lg"><span>Total</span><span id="cart-total">₹0</span></div>
+      <div class="bg-green-50 text-green-700 text-[11px] p-2 rounded mt-2">💰 Paisa direct Admin UPI <b>8368322869@ybl</b> pe jayega</div>
       <button onclick="checkout(false)" class="w-full bg-[#f43397] text-white p-3 rounded-lg mt-3 font-bold">Online Pay - GPay/PhonePe</button>
       <button onclick="checkout(true)" class="w-full bg-black text-white p-3 rounded-lg mt-2 font-bold">Cash on Delivery</button>
-      <p class="text-[10px] text-center text-gray-400 mt-2">100% Safe | Free Delivery</p>
+      <p class="text-[10px] text-center text-gray-400 mt-2">Admin ko har order pe 30% milega</p>
     </div>
   </div>
 </div>
 
 <script>
-let products = [
-  {id:1, name:"Georgette Saree", sell:499, img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400"},
-  {id:2, name:"Men Stylish Kurta", sell:399, img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400"},
-  {id:3, name:"Wireless Earbuds Pro", sell:799, img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"},
-  {id:4, name:"Sports Shoes", sell:899, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
-  {id:5, name:"Designer Lehenga", sell:1299, img:"https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400"},
-  {id:6, name:"Smart Watch", sell:999, img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+let allProducts = [
+  {id:1, name:"Georgette Saree", cat:"saree", sell:499, img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400"},
+  {id:2, name:"Men Stylish Kurta", cat:"kurta", sell:399, img:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400"},
+  {id:3, name:"Wireless Earbuds Pro", cat:"earbuds", sell:799, img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"},
+  {id:4, name:"Sports Running Shoes", cat:"shoes", sell:899, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
+  {id:5, name:"Designer Lehenga Saree", cat:"saree", sell:1299, img:"https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400"},
+  {id:6, name:"Smart Watch Series 8", cat:"watch", sell:999, img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+  {id:7, name:"Cotton Kurta Set", cat:"kurta", sell:599, img:"https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400"},
+  {id:8, name:"Casual Shoes", cat:"shoes", sell:699, img:"https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400"},
 ];
+let products = [...allProducts];
 let cart = JSON.parse(localStorage.getItem('remart_cart')||'[]');
 
-function renderProducts(){
-  document.getElementById('products').innerHTML = products.map(p=>`
+function render(list){
+  document.getElementById('products').innerHTML = list.map(p=>`
     <div class="bg-white rounded-xl overflow-hidden border">
       <img src="${p.img}" class="h-44 w-full object-cover">
       <div class="p-2">
-        <p class="text-[13px] font-medium truncate">${p.name}</p>
+        <p class="text-[13px] font-semibold truncate">${p.name}</p>
         <div class="flex items-center gap-2 mt-1"><p class="font-bold text-[15px]">₹${p.sell}</p><p class="text-[11px] text-gray-400 line-through">₹${p.sell+300}</p><p class="text-[11px] text-green-600 font-bold">30% off</p></div>
-        <p class="text-[10px] text-gray-500 mt-1">Free Delivery • COD</p>
+        <p class="text-[10px] text-gray-500 mt-1">Free Delivery • COD • Rating 4.2★</p>
         <button onclick="addToCart(${p.id})" class="w-full border border-[#f43397] text-[#f43397] text-xs p-2 rounded-lg mt-2 font-bold">Add to Cart</button>
       </div>
     </div>
-  `).join('');
+  `).join('') || `<p class="col-span-2 text-center text-gray-400 mt-10">Kuch nahi mila</p>`;
 }
 function addToCart(id){
-  cart.push(products.find(x=>x.id==id));
+  let p = allProducts.find(x=>x.id==id);
+  cart.push(p);
   localStorage.setItem('remart_cart', JSON.stringify(cart));
   updateCart(); openCart();
 }
@@ -93,26 +100,38 @@ function updateCart(){
   document.getElementById('cart-total').innerText = '₹'+total;
   document.getElementById('cart-items').innerHTML = cart.map((c,i)=>`
     <div class="flex gap-3 border p-2 rounded-lg"><img src="${c.img}" class="w-14 h-14 rounded object-cover"><div class="flex-1"><p class="text-sm font-bold">${c.name}</p><p class="text-sm">₹${c.sell}</p></div><button onclick="remove(${i})" class="text-xs text-red-500">Remove</button></div>
-  `).join('') || '<p class="text-center text-sm text-gray-400 mt-10">Cart khali hai, shopping karo!</p>';
+  `).join('') || '<p class="text-center text-sm text-gray-400 mt-10">Cart khali hai</p>';
 }
 function remove(i){ cart.splice(i,1); localStorage.setItem('remart_cart', JSON.stringify(cart)); updateCart(); }
 function openCart(){ document.getElementById('cart-drawer').classList.remove('hidden'); }
 function closeCart(){ document.getElementById('cart-drawer').classList.add('hidden'); }
+function searchProduct(q){
+  q=q.toLowerCase();
+  let filtered = allProducts.filter(p=>p.name.toLowerCase().includes(q) || p.cat.includes(q));
+  document.getElementById('cat-title').innerText = q? `Search: ${q}` : 'Products For You';
+  render(filtered);
+}
+function filterCat(cat){
+  if(cat=='all'){ products=[...allProducts]; document.getElementById('cat-title').innerText='Products For You'; render(products); return; }
+  let filtered = allProducts.filter(p=>p.cat==cat || p.name.toLowerCase().includes(cat));
+  document.getElementById('cat-title').innerText=cat.toUpperCase();
+  render(filtered);
+}
 function checkout(isCOD){
   let total = cart.reduce((s,i)=>s+i.sell,0);
   if(total==0){ alert("Cart khali hai!"); return; }
   let upi="8368322869@ybl";
   if(isCOD){
     let fee=Math.round(total*0.30);
-    alert(`COD Order Confirm! ✅\n\nTotal: ₹${total}\nTera Fee: ₹${fee} (Reseller wallet se katega aur tere UPI ${upi} pe ayega)\n\nDelivery ke baad reseller ko pura paisa milega.`);
+    alert(`COD Order Confirm! ✅\n\nTotal: ₹${total}\nTera Platform Fee: ₹${fee} (Reseller wallet se katega aur tere UPI ${upi} pe ayega)`);
   }else{
-    let link=`upi://pay?pa=${upi}&pn=ReMart&am=${total}&cu=INR&tn=ReMart Order`;
+    let link=`upi://pay?pa=${upi}&pn=ReMart&am=${total}&cu=INR&tn=ReMart Order ${Date.now()}`;
     window.location.href=link;
-    setTimeout(()=>{ alert(`GPay/PhonePe khul gaya! ₹${total} direct ${upi} pe jayega.`); },800);
+    setTimeout(()=>{ alert(`GPay/PhonePe khul gaya! ₹${total} direct ${upi} pe jayega. Tera 30% profit hai.`); },800);
   }
   cart=[]; localStorage.removeItem('remart_cart'); updateCart(); closeCart();
 }
-renderProducts(); updateCart();
+render(allProducts); updateCart();
 </script>
 </body>
-        </html>
+  </html>
