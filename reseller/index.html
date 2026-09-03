@@ -1,42 +1,17 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reseller</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-gray-50">
-<div id="login" class="flex items-center justify-center min-h-screen p-4">
-  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-sm">
-    <h1 class="text-2xl font-bold">Reseller Login</h1><p class="text-sm text-gray-500 mb-6">Apna profit dekho</p>
-    <input id="email" type="email" placeholder="Email" class="w-full border-2 p-3 rounded-lg mb-3">
-    <input id="upi" type="text" placeholder="Tumhara UPI ID (jaise sonu@paytm)" class="w-full border-2 p-3 rounded-lg mb-4">
-    <button id="btn" class="w-full bg-black text-white p-3 rounded-lg font-bold">Login</button>
-  </div>
-</div>
-<div id="dash" class="hidden">
-  <header class="bg-black text-white p-4 flex justify-between"><h1 class="font-bold">ReMart Reseller</h1><button onclick="localStorage.clear();location.reload()" class="text-xs bg-white text-black px-2 py-1 rounded">Logout</button></header>
-  <div class="p-4 grid grid-cols-2 gap-3">
-    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Total Kamai</p><h2 class="text-xl font-bold text-green-600">₹320</h2><p class="text-xs text-gray-400">2 orders se</p></div>
-    <div class="bg-white p-4 rounded-xl shadow"><p class="text-xs text-gray-500">Pending Payout</p><h2 class="text-xl font-bold">₹320</h2><button class="mt-2 w-full bg-green-600 text-white text-xs py-2 rounded">Request Payout</button></div>
-  </div>
-  <div class="p-4">
-    <div class="bg-white rounded-xl shadow p-4 mb-4">
-      <h3 class="font-bold text-sm mb-2">Tera Selling Link</h3>
-      <input id="link" value="https://remart2.vercel.app/?ref=SONU" class="w-full border p-2 rounded text-sm bg-gray-50">
-      <button onclick="navigator.clipboard.writeText(document.getElementById('link').value); alert('Copied!')" class="mt-2 w-full bg-black text-white py-2 rounded text-sm">Copy Link - WhatsApp pe share kar</button>
-      <p class="text-xs text-gray-400 mt-2">Is link se jo kharidega, tujhe profit milega. Tera UPI: <span id="showUpi"></span></p>
-    </div>
-    <div class="bg-white rounded-xl shadow p-4"><h3 class="font-bold text-sm mb-3">Mere Orders</h3><div class="text-sm space-y-2"><div class="border p-2 rounded flex justify-between"><span>Kurta ₹499</span><span class="text-green-600 font-bold">+₹120</span></div><div class="border p-2 rounded flex justify-between"><span>Saree ₹899</span><span class="text-green-600 font-bold">+₹200</span></div></div></div>
-  </div>
-</div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Reseller</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body class="bg-gray-50 p-4"><h1 class="text-xl font-black">ReMart Seller Panel</h1><p class="text-xs text-gray-500">Your Code: <span id="code" class="font-bold"></span></p>
+<div class="bg-white p-4 rounded-xl shadow mt-4 space-y-3">
+<input id="title" placeholder="Product Title (e.g. Kurta)" class="w-full border p-2 rounded">
+<input id="image" placeholder="Image URL paste karo" class="w-full border p-2 rounded">
+<div class="flex gap-2"><input id="base" type="number" placeholder="Meesho Price (500)" class="w-1/2 border p-2 rounded"><input id="commission" type="number" placeholder="Your Profit (100)" class="w-1/2 border p-2 rounded"></div>
+<div class="bg-yellow-50 p-2 rounded text-xs">Sell Price: ₹<span id="fp">0</span> | My Fee 5%: ₹<span id="fee">0</span> | You Get: ₹<span id="net">0</span></div>
+<input id="wa" placeholder="Your WhatsApp No 91XXXXXXXXXX" class="w-full border p-2 rounded">
+<button onclick="add()" class="w-full bg-black text-white py-3 rounded-xl font-bold">Add to Shop</button>
+</div><div id="list" class="mt-6 grid grid-cols-2 gap-2"></div>
 <script>
-document.getElementById('btn').addEventListener('click', function(){
-  var e=document.getElementById('email').value; var u=document.getElementById('upi').value;
-  if(!e){alert('Email daal');return;} if(!u){alert('UPI daal jisse tujhe paise milenge');return;}
-  localStorage.setItem('resEmail',e); localStorage.setItem('resUpi',u);
-  showDash();
-});
-function showDash(){
-  var e=localStorage.getItem('resEmail'); var u=localStorage.getItem('resUpi');
-  if(!e) return;
-  document.getElementById('login').classList.add('hidden'); document.getElementById('dash').classList.remove('hidden');
-  document.getElementById('showUpi').innerText=u; document.getElementById('link').value='https://remart2.vercel.app/?ref='+e.split('@')[0].toUpperCase();
-}
-showDash();
-</script></body></html>
+const supa=supabase.createClient("https://wvazcudexrrzcfiotkan.supabase.co","sb_publishable_-clOP2Nb7AYi4xPJgVzULQ_TT4VEklP");
+let code=localStorage.getItem('rc')||'RES'+Math.floor(Math.random()*9000);localStorage.setItem('rc',code);document.getElementById('code').innerText=code;
+let b=document.getElementById('base'),c=document.getElementById('commission');
+function calc(){let bv=parseInt(b.value||0),cv=parseInt(c.value||0),fp=bv+cv;document.getElementById('fp').innerText=fp;let fee=Math.round(fp*0.05);document.getElementById('fee').innerText=fee;document.getElementById('net').innerText=cv-fee;}
+b.addEventListener('input',calc);c.addEventListener('input',calc);
+async function add(){let t=document.getElementById('title').value,i=document.getElementById('image').value,bv=parseInt(document.getElementById('base').value),cv=parseInt(document.getElementById('commission').value),w=document.getElementById('wa').value,fp=bv+cv;if(!t||!i||!bv||!cv||!w)return alert('sab bharo');let {error}=await supa.from('products').insert([{reseller_code:code,reseller_whatsapp:w,title:t,image:i,base_price:bv,commission:cv,final_price:fp}]);if(error)alert(error.message);else{alert('Product
