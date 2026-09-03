@@ -1,44 +1,88 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Reseller - ReMart</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-gray-100 p-4">
-<div class="max-w-md mx-auto space-y-4">
-  <div class="bg-black text-white p-4 rounded-xl flex justify-between">
-    <div><p class="text-xs opacity-70">Wallet Balance</p><h1 id="wallet" class="text-2xl font-bold">₹0</h1></div>
-    <button onclick="addMoney()" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Add Money</button>
-  </div>
-  <div class="bg-white p-4 rounded-xl shadow">
-    <h2 class="font-bold">Add New Product</h2>
-    <input id="pname" placeholder="Product Name" class="w-full border p-2 mt-2 rounded">
-    <div class="flex gap-2 mt-2">
-      <input id="cost" type="number" placeholder="Original Cost (e.g. 300)" class="w-1/2 border p-2 rounded">
-      <input id="sell" type="number" placeholder="Selling Price (e.g. 500)" class="w-1/2 border p-2 rounded">
-    </div>
-    <p class="text-xs mt-2 text-gray-500">Profit: <span id="profit">0</span> | Tera 70% | Admin 30%</p>
-    <button onclick="addProduct()" class="w-full bg-black text-white p-2 rounded mt-3">List Product</button>
-  </div>
-  <div class="bg-white p-4 rounded-xl shadow"><h2 class="font-bold">My Orders</h2><p class="text-sm text-gray-500 mt-2">COD ke liye wallet me paisa hona zaruri hai.</p></div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reseller - ReMart PRO</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body class="bg-[#f8f8f8] p-3">
+<div class="bg-black text-white p-4 rounded-xl flex justify-between items-center">
+<div><p class="text-xs text-gray-400">Wallet Balance</p><h1 id="wallet" class="text-2xl font-black">₹0</h1><p id="phoneShow" class="text-[10px] text-gray-400 mt-1"></p></div>
+<button onclick="document.getElementById('addBox').classList.toggle('hidden')" class="bg-white text-black px-4 py-2 rounded-full text-sm font-bold">+ Add Money</button>
 </div>
+
+<div id="addBox" class="hidden bg-white p-4 rounded-xl mt-3 border-2 border-[#f43397]">
+<h3 class="font-bold text-sm">Wallet me paise add karo</h3>
+<p class="text-xs text-gray-500 mt-1">Step 1: Neeche amount bharo aur UPI pe bhejo</p>
+<div class="flex gap-2 mt-2"><input id="addAmt" type="number" placeholder="500" class="border p-2 rounded flex-1 text-sm"><button onclick="payUPI()" class="bg-[#f43397] text-white px-4 rounded font-bold text-sm">UPI Pay</button></div>
+<p class="text-xs text-gray-500 mt-3">Step 2: Payment ke baad UTR/Ref No daalo (GPay pe 12 digit)</p>
+<div class="flex gap-2 mt-1"><input id="utr" placeholder="UTR No - 12 digit" class="border p-2 rounded flex-1 text-sm"><button onclick="verifyPayment()" class="bg-black text-white px-4 rounded font-bold text-sm">Verify</button></div>
+<p class="text-[10px] text-gray-400 mt-2">Note: Admin 2 min me verify karega, fir wallet me add hoga. Abhi ke liye demo me direct add ho raha hai.</p>
+</div>
+
+<div class="bg-white p-4 rounded-xl mt-3">
+<h3 class="font-bold">💸 Paise Nikalo (Withdraw)</h3>
+<div class="flex gap-2 mt-2"><input id="withAmt" type="number" placeholder="Min ₹100" class="border p-2 rounded flex-1 text-sm"><button onclick="withdraw()" class="bg-black text-white px-4 rounded font-bold text-sm">Withdraw</button></div>
+<p class="text-[10px] text-gray-400 mt-2">Tera UPI 8368322869@ybl pe admin bhej dega 24h me</p>
+</div>
+
+<div class="bg-white p-4 rounded-xl mt-3">
+<h3 class="font-bold">Add New Product</h3>
+<input id="pName" placeholder="Product Name - Ex: Saree" class="w-full border p-2.5 rounded-lg mt-3 text-sm">
+<div class="flex gap-2 mt-2"><input id="pCost" type="number" placeholder="Original Cost (ex: 300)" class="border p-2 rounded flex-1 text-sm"><input id="pSell" type="number" placeholder="Selling Price (ex: 500)" class="border p-2 rounded flex-1 text-sm"></div>
+<p id="profitText" class="text-xs mt-2 text-gray-500">Profit: 0 | Tera 70% | Admin 30%</p>
+<input id="pImg" placeholder="Image Link (optional)" class="w-full border p-2.5 rounded-lg mt-2 text-sm">
+<button onclick="listProduct()" class="w-full bg-black text-white p-3 rounded-lg mt-3 font-bold">List Product</button>
+</div>
+
+<div class="bg-white p-4 rounded-xl mt-3"><h3 class="font-bold">My Orders</h3><p class="text-xs text-gray-400 mt-2">COD ke liye wallet me paisa hona zaruri hai. Har COD pe 30% wallet se katega.</p><div id="myOrders" class="mt-3 space-y-2"></div></div>
+
 <script>
-  let wallet = parseInt(localStorage.getItem('wallet')||'0');
-  document.getElementById('wallet').innerText = '₹'+wallet;
-  document.getElementById('cost').oninput = document.getElementById('sell').oninput = ()=>{
-    let c=parseInt(document.getElementById('cost').value||0); let s=parseInt(document.getElementById('sell').value||0);
-    document.getElementById('profit').innerText = '₹'+(s-c);
-  }
-  function addMoney(){
-    let amt = prompt("Kitna add karna hai? (e.g. 500)");
-    if(!amt) return;
-    let upi = "8368322869@ybl";
-    let link = `upi://pay?pa=${upi}&pn=ReMart Admin&am=${amt}&cu=INR&tn=Wallet Recharge`;
-    window.location.href = link;
-    alert("Payment ke baad admin approve karega, fir wallet me paisa aayega. Screenshot admin ko bhej do.");
-    // Demo ke liye turant add kar diya
-    wallet += parseInt(amt);
-    localStorage.setItem('wallet', wallet);
-    document.getElementById('wallet').innerText = '₹'+wallet;
-  }
-  function addProduct(){ alert("Product Listed! Jab order ayega, 30% admin fee wallet se katega."); }
-</script>
-</body>
-</html>
+const client = supabase.createClient("https://wvazcudexrrzcfiotkan.supabase.co", "sb_publishable_-clOP2Nb7AYi4xPJgVzULQ_TT4VEklP");
+let myPhone = localStorage.getItem('res_phone') || prompt("Apna Phone Number daalo (Reseller ID)");
+if(myPhone) { localStorage.setItem('res_phone', myPhone); document.getElementById('phoneShow').innerText = "ID: "+myPhone; }
+
+document.getElementById('pCost').addEventListener('input', calcProfit);
+document.getElementById('pSell').addEventListener('input', calcProfit);
+function calcProfit(){ let c=parseInt(document.getElementById('pCost').value)||0, s=parseInt(document.getElementById('pSell').value)||0, p=s-c; document.getElementById('profitText').innerText=`Profit: ₹${p} | Tera 70%: ₹${Math.round(p*0.7)} | Admin 30%: ₹${Math.round(p*0.3)}`; }
+
+async function loadWallet(){ if(!myPhone) return; let {data} = await client.from('resellers').select('*').eq('phone', myPhone).single(); if(data) document.getElementById('wallet').innerText='₹'+data.wallet; }
+function payUPI(){ let amt=document.getElementById('addAmt').value; if(!amt) return alert("Amount bharo"); window.location.href=`upi://pay?pa=8368322869@ybl&pn=ReMartAdmin&am=${amt}&cu=INR&tn=Wallet Recharge ${myPhone}`; }
+
+async function verifyPayment(){
+ let amt=parseInt(document.getElementById('addAmt').value), utr=document.getElementById('utr').value;
+ if(!amt||!utr||utr.length<6) return alert("Amount aur sahi UTR bharo");
+ // Demo: direct add (real me admin verify karega)
+ let {data} = await client.from('resellers').select('*').eq('phone', myPhone).single();
+ if(data){ await client.from('resellers').update({wallet: data.wallet+amt}).eq('phone', myPhone); }
+ else { await client.from('resellers').insert([{phone:myPhone, wallet:amt, name:myPhone}]); await client.from('wallet_requests').insert([{phone:myPhone, amount:amt, utr:utr, status:'PENDING'}]); }
+ alert("Request bhej diya! Admin verify karke 2 min me add karega. Demo me abhi add ho gaya.");
+ loadWallet();
+}
+async function withdraw(){
+ let amt=parseInt(document.getElementById('withAmt').value);
+ if(!amt||amt<100) return alert("Min ₹100");
+ let {data} = await client.from('resellers').select('*').eq('phone', myPhone).single();
+ if(!data||data.wallet<amt) return alert("Wallet me itna balance nahi");
+ await client.from('resellers').update({wallet: data.wallet-amt}).eq('phone', myPhone);
+ await client.from('withdraw_requests').insert([{phone:myPhone, amount:amt, status:'PENDING'}]);
+ alert("Withdraw request bhej diya! 24h me 8368322869@ybl se ayega");
+ loadWallet();
+}
+async function listProduct(){
+ let name=document.getElementById('pName').value, cost=parseInt(document.getElementById('pCost').value), sell=parseInt(document.getElementById('pSell').value), img=document.getElementById('pImg').value||"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400";
+ if(!name||!cost||!sell) return alert("Naam, Cost, Sell bharo");
+ if(sell<=cost) return alert("Selling price cost se zyada rakho");
+ let {error} = await client.from('products').insert([{name:name, original_cost:cost, selling_price:sell, image:img, reseller_phone:myPhone, profit:sell-cost}]);
+ if(error) return alert(error.message);
+ alert("Product List ho gaya! Ab main site pe dikhega");
+ document.getElementById('pName').value=''; document.getElementById('pCost').value=''; document.getElementById('pSell').value='';
+ loadMyProducts();
+}
+
+async function loadMyProducts(){
+ let {data} = await client.from('orders').select('*').ilike('address', `%${myPhone}%`);
+ if(data) document.getElementById('myOrders').innerHTML = data.map(o=>`<div class="border p-2 rounded text-xs"><p>${o.customer_name} - ₹${o.total}</p><p class="text-gray-400">${new Date(o.created_at).toLocaleDateString()}</p></div>`).join('') || 'No orders yet';
+}
+loadWallet(); loadMyProducts();
+
+// Supabase me 2 table aur banao
+// SQL Editor me ye chalana:
+// create table wallet_requests (id uuid default gen_random_uuid() primary key, phone text, amount int, utr text, status text, created_at timestamp default now());
+// create table withdraw_requests (id uuid default gen_random_uuid() primary key, phone text, amount int, status text, created_at timestamp default now());
+// create table products (id uuid default gen_random_uuid() primary key, name text, original_cost int, selling_price int, image text, reseller_phone text, profit int, created_at timestamp default now());
+</script></body></html>
