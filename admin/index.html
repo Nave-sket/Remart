@@ -1,6 +1,25 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Admin</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-gray-100 p-10 text-center">
-<h1 class="text-2xl font-bold">Admin Fix ho raha hai</h1>
-<p class="mt-4">UPI: 8368322869@ybl</p>
-<a href="/" class="mt-4 inline-block bg-black text-white px-4 py-2 rounded">Shop pe jao</a>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - ReMart</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-gray-100 p-4">
+<h1 class="font-black text-xl">ReMart Admin - Profit Dashboard</h1>
+<p class="text-xs text-gray-500">UPI: <b>8368322869@ybl</b> pe saara paisa ayega</p>
+
+<div class="grid grid-cols-2 gap-3 mt-4">
+  <div class="bg-white p-4 rounded-xl"><p class="text-xs text-gray-500">Aaj ka Profit (30%)</p><p id="profit" class="font-black text-xl text-green-600">₹0</p></div>
+  <div class="bg-white p-4 rounded-xl"><p class="text-xs text-gray-500">Total Orders</p><p id="orders" class="font-black text-xl">0</p></div>
+  <div class="bg-white p-4 rounded-xl"><p class="text-xs text-gray-500">Wallet Recharge Pending</p><p class="font-black text-xl text-orange-600">₹0</p><button class="text-xs bg-black text-white px-3 py-1 rounded mt-1">Approve Karo</button></div>
+  <div class="bg-white p-4 rounded-xl"><p class="text-xs text-gray-500">Reseller Ko Dena Hai</p><p class="font-black text-xl">₹0</p></div>
+</div>
+
+<div class="bg-white p-4 rounded-xl mt-4">
+<h2 class="font-bold">Recent Orders</h2>
+<p class="text-xs text-gray-400 mt-2">Abhi local storage se hai, baad me Firebase jod denge. Test ke liye hai.</p>
+<div id="order-list" class="mt-3 text-sm text-gray-400">Koi order nahi hai abhi. Customer jab order karega toh yaha ayega.</div>
+</div>
+
+<div class="bg-[#f43397] text-white p-4 rounded-xl mt-4">
+<p class="font-bold">Kaise Paisa Ayega?</p>
+<p class="text-xs mt-1">1. Customer Online Pay karega -> Direct tere UPI 8368322869@ybl pe -> Tujhe 30% rakhna, 70% reseller ko de dena.</p>
+<p class="text-xs mt-1">2. Customer COD karega -> Reseller ke wallet se 30% auto tere paas -> Delivery ke baad pura paisa reseller ka.</p>
+</div>
 </body></html>
