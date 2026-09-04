@@ -1,0 +1,8 @@
+{
+  "name": "ReMart",
+  "description": "Lowest price shopping and reseller marketplace with catalog, cart, COD/UPI checkout, reseller wallet, and admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

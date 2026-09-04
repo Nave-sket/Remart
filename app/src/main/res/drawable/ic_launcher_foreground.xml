@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Centered within the 66dp safe zone (21 to 87 on 108x108 grid) -->
+    <!-- Shopping Bag -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,40 L74,40 L71,80 C70.8,82.2 69,84 66.8,84 L41.2,84 C39,84 37.2,82.2 37,80 L34,40 Z" />
+    <!-- Bag Handle -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M44,40 C44,31 64,31 64,40" />
+    <!-- Rupee / Resell symbol inside bag -->
+    <path
+        android:fillColor="#F43397"
+        android:pathData="M49,50 L59,50 M49,54 L59,54 M49,50 L49,58 C51.5,58 54,58 55,56.5 C56,55 55,52 52,52 M49,58 L57,70"
+        android:strokeColor="#F43397"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <!-- Sparkle / Star top right -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M73,32 L75,37 L80,39 L75,41 L73,46 L71,41 L66,39 L71,37 Z" />
+</vector>
